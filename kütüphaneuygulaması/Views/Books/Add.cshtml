@@ -1,0 +1,27 @@
+﻿@model kütüphaneuygulaması.Models.Book
+@{
+    ViewData["Title"] = "Kitap Ekle";
+}
+
+<h2 class="mb-4">Yeni Kitap Ekle</h2>
+
+<form method="post" action="/Books/Add">
+    <div class="mb-3">
+        <label class="form-label">Kitap Başlığı</label>
+        <input type="text" class="form-control" name="Title" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Yazar</label>
+        <input type="text" class="form-control" name="Author" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Fiyat (₺)</label>
+        <input type="number" class="form-control" name="Price" step="0.01" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Stok</label>
+        <input type="number" class="form-control" name="Stock" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a href="/Books/Index" class="btn btn-secondary">İptal</a>
+</form>
