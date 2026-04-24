@@ -3,26 +3,59 @@
     ViewData["Title"] = "Kitap Güncelle";
 }
 
-<h2 class="mb-4">Kitap Güncelle</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">Kitap Güncelle</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/Books/Update">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="Id" value="@Model.Id" />
 
-<form method="post" action="/Books/Update">
-    <input type="hidden" name="Id" value="@Model.Id" />
-    <div class="mb-3">
-        <label class="form-label">Kitap Başlığı</label>
-        <input type="text" class="form-control" name="Title" value="@Model.Title" required />
+                    <div class="mb-3">
+                        <label class="form-label">Kitap Başlığı</label>
+                        <input type="text" class="form-control @(ViewData.ModelState["Title"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                               name="Title" value="@Model.Title" />
+                        <span class="text-danger small">
+                            @Html.ValidationMessage("Title")
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Yazar</label>
+                        <input type="text" class="form-control @(ViewData.ModelState["Author"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                               name="Author" value="@Model.Author" />
+                        <span class="text-danger small">
+                            @Html.ValidationMessage("Author")
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fiyat (₺)</label>
+                        <input type="number" class="form-control @(ViewData.ModelState["Price"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                               name="Price" value="@Model.Price" step="0.01" />
+                        <span class="text-danger small">
+                            @Html.ValidationMessage("Price")
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Stok</label>
+                        <input type="number" class="form-control @(ViewData.ModelState["Stock"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                               name="Stock" value="@Model.Stock" />
+                        <span class="text-danger small">
+                            @Html.ValidationMessage("Stock")
+                        </span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning">Güncelle</button>
+                        <a href="/Books/Index" class="btn btn-secondary">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Yazar</label>
-        <input type="text" class="form-control" name="Author" value="@Model.Author" required />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Fiyat (₺)</label>
-        <input type="number" class="form-control" name="Price" value="@Model.Price" step="0.01" required />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Stok</label>
-        <input type="number" class="form-control" name="Stock" value="@Model.Stock" required />
-    </div>
-    <button type="submit" class="btn btn-warning">Güncelle</button>
-    <a href="/Books/Index" class="btn btn-secondary">İptal</a>
-</form>
+</div>

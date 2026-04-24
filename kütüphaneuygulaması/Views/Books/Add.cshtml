@@ -3,25 +3,61 @@
     ViewData["Title"] = "Kitap Ekle";
 }
 
-<h2 class="mb-4">Yeni Kitap Ekle</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Yeni Kitap Ekle</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/Books/Add">
+                    @Html.AntiForgeryToken()
 
-<form method="post" action="/Books/Add">
-    <div class="mb-3">
-        <label class="form-label">Kitap Başlığı</label>
-        <input type="text" class="form-control" name="Title" required />
+                    <div class="mb-3">
+                        <label class="form-label">Kitap Başlığı</label>
+                        <input type="text" class="form-control" name="Title" value="@Model?.Title" />
+                        <span class="text-danger small">@Html.ValidationMessage("Title")</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Yazar</label>
+                        <input type="text" class="form-control" name="Author" value="@Model?.Author" />
+                        <span class="text-danger small">@Html.ValidationMessage("Author")</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-select" name="CategoryId">
+                            <option value="0">-- Kategori Seçiniz --</option>
+                            @if (ViewBag.Categories != null)
+                            {
+                                @foreach (var item in ViewBag.Categories)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                        <span class="text-danger small">@Html.ValidationMessage("CategoryId")</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fiyat (₺)</label>
+                        <input type="number" class="form-control" name="Price" value="@Model?.Price" step="0.01" />
+                        <span class="text-danger small">@Html.ValidationMessage("Price")</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Stok</label>
+                        <input type="number" class="form-control" name="Stock" value="@Model?.Stock" />
+                        <span class="text-danger small">@Html.ValidationMessage("Stock")</span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                        <a href="/Books/Index" class="btn btn-secondary">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Yazar</label>
-        <input type="text" class="form-control" name="Author" required />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Fiyat (₺)</label>
-        <input type="number" class="form-control" name="Price" step="0.01" required />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Stok</label>
-        <input type="number" class="form-control" name="Stock" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Kaydet</button>
-    <a href="/Books/Index" class="btn btn-secondary">İptal</a>
-</form>
+</div>

@@ -3,35 +3,52 @@
     ViewData["Title"] = "Kitap Listesi";
 }
 
-<h2 class="mb-4">Kitap Listesi</h2>
-<a href="/Books/Add" class="btn btn-success mb-3">+ Yeni Kitap Ekle</a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Kitap Listesi</h2>
+    <a href="/Books/Add" class="btn btn-success">+ Yeni Kitap Ekle</a>
+</div>
 
-<table class="table table-bordered table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Başlık</th>
-            <th>Yazar</th>
-            <th>Fiyat</th>
-            <th>Stok</th>
-            <th>İşlem</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var book in Model)
-        {
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz kitap eklenmemiş.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
             <tr>
-                <td>@book.Id</td>
-                <td>@book.Title</td>
-                <td>@book.Author</td>
-                <td>@book.Price.ToString("F2") ₺</td>
-                <td>@book.Stock</td>
-                <td>
-                    <a href="/Books/Update/@book.Id" class="btn btn-warning btn-sm">Güncelle</a>
-                    <a href="/Books/Remove/@book.Id" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Bu kitabı silmek istediğinize emin misiniz?')">Sil</a>
-                </td>
+                <th>ID</th>
+                <th>Başlık</th>
+                <th>Yazar</th>
+                <th>Fiyat</th>
+                <th>Stok</th>
+                <th style="width:160px">İşlem</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Id</td>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Price.ToString("F2") ₺</td>
+                    <td>@book.Stock</td>
+                    <td>
+                        <a href="/Books/Update/@book.Id" class="btn btn-warning btn-sm">Güncelle</a>
+                        <a href="/Books/Remove/@book.Id" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Bu kitabı silmek istediğinize emin misiniz?')">Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
