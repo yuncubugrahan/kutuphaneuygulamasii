@@ -15,10 +15,36 @@ namespace kütüphaneuygulaması.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string search, int? categoryId, string sort)
         {
-            var books = _context.Books.Include(b => b.Category).ToList();
-            return View(books);
+            var books = _context.Books.Include(b => b.Category).AsQueryable();
+
+            // Arama
+            if (!string.IsNullOrEmpty(search))
+                books = books.Where(b => b.Title.Contains(search));
+
+            // Filtreleme
+            if (categoryId.HasValue && categoryId > 0)
+                books = books.Where(b => b.CategoryId == categoryId);
+
+            // Sıralama
+            books = sort switch
+            {
+                "title_asc" => books.OrderBy(b => b.Title),
+                "title_desc" => books.OrderByDescending(b => b.Title),
+                "price_asc" => books.OrderBy(b => b.Price),
+                "price_desc" => books.OrderByDescending(b => b.Price),
+                "stock_asc" => books.OrderBy(b => b.Stock),
+                "stock_desc" => books.OrderByDescending(b => b.Stock),
+                _ => books.OrderBy(b => b.Id)
+            };
+
+            ViewBag.Search = search;
+            ViewBag.CategoryId = categoryId;
+            ViewBag.Sort = sort;
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name", categoryId);
+
+            return View(books.ToList());
         }
 
         [HttpGet]
@@ -37,7 +63,6 @@ namespace kütüphaneuygulaması.Controllers
                 ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
                 return View(newBook);
             }
-
             _context.Books.Add(newBook);
             _context.SaveChanges();
             TempData["Success"] = "Kitap başarıyla eklendi.";
@@ -62,7 +87,6 @@ namespace kütüphaneuygulaması.Controllers
                 ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
                 return View(updatedBook);
             }
-
             _context.Books.Update(updatedBook);
             _context.SaveChanges();
             TempData["Success"] = "Kitap başarıyla güncellendi.";

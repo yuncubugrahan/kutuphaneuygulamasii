@@ -1,9 +1,12 @@
 ﻿@model List<kütüphaneuygulaması.Models.Book>
 @{
     ViewData["Title"] = "Kitap Listesi";
+    string currentSearch = ViewBag.Search ?? "";
+    string currentSort = ViewBag.Sort ?? "";
+    int currentCategoryId = ViewBag.CategoryId ?? 0;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Kitap Listesi</h2>
     <a href="/Books/Add" class="btn btn-success">+ Yeni Kitap Ekle</a>
 </div>
@@ -16,9 +19,101 @@
     </div>
 }
 
+<form method="get" action="/Books/Index" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" class="form-control" name="search"
+               placeholder="Kitap adı ara..." value="@currentSearch" />
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" name="categoryId">
+            <option value="0">-- Tüm Kategoriler --</option>
+            @foreach (SelectListItem item in ViewBag.Categories)
+            {
+                if (item.Value == currentCategoryId.ToString())
+                {
+                    <option value="@item.Value" selected>@item.Text</option>
+                }
+                else
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" name="sort">
+            @if (currentSort == "")
+            {
+                <option value="" selected>-- Sıralama --</option>
+            }
+            else
+            {
+                <option value="">-- Sıralama --</option>
+            }
+
+            @if (currentSort == "title_asc")
+            {
+                <option value="title_asc" selected>Ad: A → Z</option>
+            }
+            else
+            {
+                <option value="title_asc">Ad: A → Z</option>
+            }
+
+            @if (currentSort == "title_desc")
+            {
+                <option value="title_desc" selected>Ad: Z → A</option>
+            }
+            else
+            {
+                <option value="title_desc">Ad: Z → A</option>
+            }
+
+            @if (currentSort == "price_asc")
+            {
+                <option value="price_asc" selected>Fiyat: Artan</option>
+            }
+            else
+            {
+                <option value="price_asc">Fiyat: Artan</option>
+            }
+
+            @if (currentSort == "price_desc")
+            {
+                <option value="price_desc" selected>Fiyat: Azalan</option>
+            }
+            else
+            {
+                <option value="price_desc">Fiyat: Azalan</option>
+            }
+
+            @if (currentSort == "stock_asc")
+            {
+                <option value="stock_asc" selected>Stok: Artan</option>
+            }
+            else
+            {
+                <option value="stock_asc">Stok: Artan</option>
+            }
+
+            @if (currentSort == "stock_desc")
+            {
+                <option value="stock_desc" selected>Stok: Azalan</option>
+            }
+            else
+            {
+                <option value="stock_desc">Stok: Azalan</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Uygula</button>
+    </div>
+</form>
+
 @if (!Model.Any())
 {
-    <div class="alert alert-info">Henüz kitap eklenmemiş.</div>
+    <div class="alert alert-warning">Arama sonucuna uygun kitap bulunamadı.</div>
 }
 else
 {
@@ -28,6 +123,7 @@ else
                 <th>ID</th>
                 <th>Başlık</th>
                 <th>Yazar</th>
+                <th>Kategori</th>
                 <th>Fiyat</th>
                 <th>Stok</th>
                 <th style="width:160px">İşlem</th>
@@ -40,6 +136,7 @@ else
                     <td>@book.Id</td>
                     <td>@book.Title</td>
                     <td>@book.Author</td>
+                    <td>@book.Category?.Name</td>
                     <td>@book.Price.ToString("F2") ₺</td>
                     <td>@book.Stock</td>
                     <td>
