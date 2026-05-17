@@ -50,7 +50,6 @@
             {
                 <option value="">-- Sıralama --</option>
             }
-
             @if (currentSort == "title_asc")
             {
                 <option value="title_asc" selected>Ad: A → Z</option>
@@ -59,7 +58,6 @@
             {
                 <option value="title_asc">Ad: A → Z</option>
             }
-
             @if (currentSort == "title_desc")
             {
                 <option value="title_desc" selected>Ad: Z → A</option>
@@ -68,7 +66,6 @@
             {
                 <option value="title_desc">Ad: Z → A</option>
             }
-
             @if (currentSort == "price_asc")
             {
                 <option value="price_asc" selected>Fiyat: Artan</option>
@@ -77,7 +74,6 @@
             {
                 <option value="price_asc">Fiyat: Artan</option>
             }
-
             @if (currentSort == "price_desc")
             {
                 <option value="price_desc" selected>Fiyat: Azalan</option>
@@ -86,7 +82,6 @@
             {
                 <option value="price_desc">Fiyat: Azalan</option>
             }
-
             @if (currentSort == "stock_asc")
             {
                 <option value="stock_asc" selected>Stok: Artan</option>
@@ -95,7 +90,6 @@
             {
                 <option value="stock_asc">Stok: Artan</option>
             }
-
             @if (currentSort == "stock_desc")
             {
                 <option value="stock_desc" selected>Stok: Azalan</option>
@@ -126,7 +120,7 @@ else
                 <th>Kategori</th>
                 <th>Fiyat</th>
                 <th>Stok</th>
-                <th style="width:160px">İşlem</th>
+                <th style="width:210px">İşlem</th>
             </tr>
         </thead>
         <tbody>
@@ -140,6 +134,7 @@ else
                     <td>@book.Price.ToString("F2") ₺</td>
                     <td>@book.Stock</td>
                     <td>
+                        <a href="/Books/Details/@book.Id" class="btn btn-info btn-sm">Detay</a>
                         <a href="/Books/Update/@book.Id" class="btn btn-warning btn-sm">Güncelle</a>
                         <a href="/Books/Remove/@book.Id" class="btn btn-danger btn-sm"
                            onclick="return confirm('Bu kitabı silmek istediğinize emin misiniz?')">Sil</a>

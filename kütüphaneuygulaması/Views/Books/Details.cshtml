@@ -1,0 +1,46 @@
+﻿@model kütüphaneuygulaması.Models.Book
+@{
+    ViewData["Title"] = "Kitap Detayı";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Kitap Detayı</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tr>
+                        <th style="width:140px">ID</th>
+                        <td>@Model.Id</td>
+                    </tr>
+                    <tr>
+                        <th>Kitap Adı</th>
+                        <td>@Model.Title</td>
+                    </tr>
+                    <tr>
+                        <th>Yazar</th>
+                        <td>@Model.Author</td>
+                    </tr>
+                    <tr>
+                        <th>Kategori</th>
+                        <td>@Model.Category?.Name</td>
+                    </tr>
+                    <tr>
+                        <th>Fiyat</th>
+                        <td>@Model.Price.ToString("F2") ₺</td>
+                    </tr>
+                    <tr>
+                        <th>Stok</th>
+                        <td>@Model.Stock</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a href="/Books/Index" class="btn btn-secondary">← Listeye Dön</a>
+                <a href="/Books/Update/@Model.Id" class="btn btn-warning ms-2">Güncelle</a>
+            </div>
+        </div>
+    </div>
+</div>

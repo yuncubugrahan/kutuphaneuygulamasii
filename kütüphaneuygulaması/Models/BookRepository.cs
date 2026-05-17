@@ -2,10 +2,7 @@
 {
     public class BookRepository
     {
-        private static List<Book> _books = new List<Book>
-        {
-            private static List<Book> _books = new List<Book>();
-    };
+        private static List<Book> _books = new List<Book>();
 
         public List<Book> GetAll()
         {
