@@ -3,6 +3,7 @@ using kütüphaneuygulaması.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace kütüphaneuygulaması.Controllers
 {
@@ -15,6 +16,7 @@ namespace kütüphaneuygulaması.Controllers
             _context = context;
         }
 
+        // Herkese açık
         public IActionResult Index(string search, int? categoryId, string sort)
         {
             var books = _context.Books.Include(b => b.Category).AsQueryable();
@@ -44,69 +46,121 @@ namespace kütüphaneuygulaması.Controllers
             return View(books.ToList());
         }
 
+        // Sadece giriş yapan kullanıcılar
+        [Authorize]
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var book = _context.Books.Include(b => b.Category).FirstOrDefault(b => b.Id == id);
-            if (book == null) return NotFound();
+            var book = _context.Books
+                .Include(b => b.Category)
+                .FirstOrDefault(b => b.Id == id);
+
+            if (book == null)
+                return NotFound();
+
             return View(book);
         }
 
+        // Sadece Admin
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Add()
         {
-            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+            ViewBag.Categories = new SelectList(
+                _context.Categories.ToList(),
+                "Id",
+                "Name"
+            );
+
             return View();
         }
 
+        // Sadece Admin
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Add(Book newBook)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+                ViewBag.Categories = new SelectList(
+                    _context.Categories.ToList(),
+                    "Id",
+                    "Name"
+                );
+
                 return View(newBook);
             }
+
             _context.Books.Add(newBook);
             _context.SaveChanges();
+
             TempData["Success"] = "Kitap başarıyla eklendi.";
+
             return RedirectToAction("Index");
         }
 
+        // Sadece Admin
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Update(int id)
         {
             var book = _context.Books.Find(id);
-            if (book == null) return NotFound();
-            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name", book.CategoryId);
+
+            if (book == null)
+                return NotFound();
+
+            ViewBag.Categories = new SelectList(
+                _context.Categories.ToList(),
+                "Id",
+                "Name",
+                book.CategoryId
+            );
+
             return View(book);
         }
 
+        // Sadece Admin
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Update(Book updatedBook)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+                ViewBag.Categories = new SelectList(
+                    _context.Categories.ToList(),
+                    "Id",
+                    "Name"
+                );
+
                 return View(updatedBook);
             }
+
             _context.Books.Update(updatedBook);
             _context.SaveChanges();
+
             TempData["Success"] = "Kitap başarıyla güncellendi.";
+
             return RedirectToAction("Index");
         }
 
+        // Sadece Admin
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Remove(int id)
         {
             var book = _context.Books.Find(id);
+
             if (book != null)
             {
                 _context.Books.Remove(book);
                 _context.SaveChanges();
+
                 TempData["Success"] = "Kitap başarıyla silindi.";
             }
+
             return RedirectToAction("Index");
         }
     }

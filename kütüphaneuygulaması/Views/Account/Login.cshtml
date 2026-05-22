@@ -1,0 +1,42 @@
+﻿@model kütüphaneuygulaması.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Giriş Yap</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/Account/Login">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">E-posta</label>
+                        <input type="email" class="form-control" name="Email" value="@Model?.Email" />
+                        <span class="text-danger small">@Html.ValidationMessage("Email")</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Şifre</label>
+                        <input type="password" class="form-control" name="Password" />
+                        <span class="text-danger small">@Html.ValidationMessage("Password")</span>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" name="RememberMe" />
+                        <label class="form-check-label">Beni Hatırla</label>
+                    </div>
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary(true)
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+                </form>
+                <hr />
+                <p class="text-center mb-0">Hesabın yok mu? <a href="/Account/Register">Kayıt Ol</a></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿@model kütüphaneuygulaması.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Kayıt Ol</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/Account/Register">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">E-posta</label>
+                        <input type="email" class="form-control" name="Email" value="@Model?.Email" />
+                        <span class="text-danger small">@Html.ValidationMessage("Email")</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Şifre</label>
+                        <input type="password" class="form-control" name="Password" />
+                        <span class="text-danger small">@Html.ValidationMessage("Password")</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Şifre Tekrar</label>
+                        <input type="password" class="form-control" name="ConfirmPassword" />
+                        <span class="text-danger small">@Html.ValidationMessage("ConfirmPassword")</span>
+                    </div>
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary(true)
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-success w-100">Kayıt Ol</button>
+                </form>
+                <hr />
+                <p class="text-center mb-0">Zaten hesabın var mı? <a href="/Account/Login">Giriş Yap</a></p>
+            </div>
+        </div>
+    </div>
+</div>
